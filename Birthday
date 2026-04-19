@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday 🎉</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  overflow-x:hidden;
+  scroll-behavior:smooth;
+}
+
+/* HEARTS */
+.heart{
+  position:fixed;
+  color:pink;
+  font-size:18px;
+  animation:float 6s linear infinite;
+  top:100%;
+}
+@keyframes float{
+  to{transform:translateY(-120vh);}
+}
+
+/* SECTIONS */
+.section{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+}
+
+/* HERO */
+.hero{
+  background:linear-gradient(45deg,#ff6b6b,#feca57,#ff9ff3,#54a0ff);
+  color:white;
+}
+
+.hero img{
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  margin-bottom:10px;
+}
+
+button{
+  padding:10px 18px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+/* CAKE */
+.cake-section{
+  background:#fff0f5;
+}
+
+.cake-box{
+  position:relative;
+  width:220px;
+  height:220px;
+}
+
+.cake-img{
+  width:100%;
+  height:100%;
+  border-radius:15px;
+  transition:0.5s;
+}
+
+/* CUT LINE */
+.cut-line{
+  position:absolute;
+  left:50%;
+  top:0;
+  width:4px;
+  height:0;
+  background:red;
+  transform:translateX(-50%);
+  transition:1s;
+}
+
+/* CUT EFFECT */
+.cut .cake-img{
+  transform:scale(0.98) rotate(-1deg);
+  filter:brightness(0.7);
+}
+
+/* MESSAGE */
+.message{
+  background:#667eea;
+  color:white;
+  font-size:1.3rem;
+  padding:20px;
+}
+
+/* CANVAS */
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  pointer-events:none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 MUSIC -->
+<audio id="music" loop>
+  <source src="https://www.soundjay.com/human/sounds/happy-birthday-song-01.mp3">
+</audio>
+
+<canvas id="canvas"></canvas>
+
+<!-- ❤️ HEARTS -->
+<script>
+setInterval(()=>{
+  let h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="💖";
+  h.style.left=Math.random()*100+"vw";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),6000);
+},300);
+</script>
+
+<!-- 🔝 HERO -->
+<div class="section hero">
+  <img src="https://i.ibb.co/0R48kKkC/Snapchat-1598062566.jpg">
+  <h1>🎉 Happy Birthday Cutie 🎉</h1>
+  <button onclick="start()">Start Celebration</button>
+</div>
+
+<!-- 🎂 CAKE -->
+<div class="section cake-section" id="cakeSec">
+  <h2>🎂 Cake Cutting Time 🎂</h2>
+
+  <div class="cake-box" id="cake">
+    <img class="cake-img" src="https://pngimg.com/uploads/cake/cake_PNG13156.png">
+    <div class="cut-line" id="line"></div>
+  </div>
+
+  <p>👉 Swipe to cut cake</p>
+</div>
+
+<!-- 💖 MESSAGE -->
+<div class="section message" id="msgSec">
+  💖 Aap meri life ka sabse special part ho Aapke aane se beran jindagi mein rang aa gyi , love you infinite time hamesha khush rahiye 💖<br><br>
+  Aapki smile = meri duniya 😍<br><br>
+  🎂 Happy Birthday Cutie 🎂
+</div>
+
+<script>
+
+function start(){
+  document.getElementById("music").play();
+  document.getElementById("cakeSec").scrollIntoView({behavior:"smooth"});
+}
+
+/* CAKE CUT */
+let startX=0;
+let cake=document.getElementById("cake");
+
+cake.addEventListener("touchstart",e=>{
+  startX=e.touches[0].clientX;
+});
+
+cake.addEventListener("touchend",e=>{
+  let endX=e.changedTouches[0].clientX;
+
+  if(Math.abs(endX-startX)>50){
+
+    document.getElementById("line").style.height="220px";
+    cake.classList.add("cut");
+
+    confetti();
+    fireworks();
+
+    setTimeout(()=>{
+      document.getElementById("msgSec").scrollIntoView({behavior:"smooth"});
+    },1200);
+  }
+});
+
+/* 🎉 CONFETTI */
+function confetti(){
+  for(let i=0;i<80;i++){
+    let c=document.createElement("div");
+    c.innerHTML="🎉";
+    c.style.position="fixed";
+    c.style.left=Math.random()*100+"vw";
+    c.style.top="0";
+    c.style.fontSize="20px";
+    document.body.appendChild(c);
+
+    let fall=setInterval(()=>{
+      c.style.top=(parseInt(c.style.top||0)+5)+"px";
+      if(parseInt(c.style.top)>window.innerHeight){
+        c.remove();
+        clearInterval(fall);
+      }
+    },20);
+  }
+}
+
+/* 🎆 FIREWORKS */
+let canvas=document.getElementById("canvas");
+let ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+function fireworks(){
+  for(let i=0;i<120;i++){
+    ctx.fillStyle="hsl("+Math.random()*360+",100%,60%)";
+    ctx.beginPath();
+    ctx.arc(Math.random()*canvas.width,Math.random()*canvas.height,3,0,Math.PI*2);
+    ctx.fill();
+  }
+}
+
+</script>
+
+</body>
+</html>
